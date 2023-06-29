@@ -3,3 +3,5 @@
 > This project is part of [Project Lemonade](https://rangho.dev/project-lemonade).
 
 Simple path tracer written in Hancom Office Hancell VBScript, based on [Raytracing in One Weekend][1] online book.
+
+[1]: https://raytracing.github.io/
