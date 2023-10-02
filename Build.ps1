@@ -6,7 +6,7 @@ function New-HCellWorkbook
     process
     {
         Write-Verbose "Creating a new HCell application..."
-        $hcell = New-Object -COMObject "HCell.Application"
+        $hcell = New-Object -ComObject "HCell.Application"
 
         Write-Verbose "Getting the current active workbook..."
         $workbook = $hcell.ActiveWorkbook
@@ -59,9 +59,6 @@ function Save-HCellWorkbook
         Write-Verbose "Saving the workbook..."
         $Workbook.SaveAs($Path)
 
-        Write-Verbose "Closing the workbook..."
-        $Workbook.Close()
-
         Write-Verbose "Closing the HCell application..."
         $Workbook.Application.Quit()
         return
@@ -70,18 +67,21 @@ function Save-HCellWorkbook
 
 
 # Enumerate all *.vbs files in the src/ directory
-$files = Get-ChildItem -Path src -Filter *.vbs
+$inputs = Get-ChildItem -Path src -Filter *.vbs
 
 # Create a new HCell instance
 $workbook = New-HCellWorkbook
 
 # Add all *.vbs files as macro modules to the workbook
-foreach ($file in $files)
+foreach ($file in $inputs)
 {
     $name = $file.Name.Replace(".vbs", "")
     $content = (Get-Content $file.FullName) -Join "`r`n"
     Add-HCellMacroModule -Workbook $workbook -Name $name -Content $content
 }
 
+# Path of the output file
+$output = "raytracing.cell"
+
 # Save the workbook
-Save-HCellWorkbook -Workbook $workbook -Path "raytracing.cell"
+Save-HCellWorkbook -Workbook $workbook -Path $output
