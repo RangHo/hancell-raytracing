@@ -1,3 +1,6 @@
+[CmdletBinding()]
+param()
+
 function New-HCellWorkbook
 {
     [CmdletBinding()]
@@ -32,10 +35,12 @@ function Add-HCellMacroModule
 
     process
     {
-        Write-Verbose "Adding header to the given code..."
+        Write-Verbose "Adding a new module $Name..."
+
+        Write-Verbose "    Adding header to the given code..."
         $Content = "Attribute VB_Name = `"$Name`"`r`n" + $Content
 
-        Write-Verbose "Adding the macro module to the workbook..."
+        Write-Verbose "    Adding the macro module to the workbook..."
         $module = $Workbook.ScriptObjects.Add(4, $Name, $Content)
 
         return

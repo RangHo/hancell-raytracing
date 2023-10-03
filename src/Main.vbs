@@ -1,8 +1,4 @@
 ''' Initialize the spreadsheet for rendering.
-Const ImageWidth = 20
-
-Const ImageHeight = 20
-
 Sub Init()
     ' Select all cells
     Cells.Select
@@ -25,8 +21,13 @@ End Sub
 
 ''' Render the scene proper.
 Sub Render()
+    ' Cache A1 cell
+    Dim A1Cell
+    Set A1Cell = Range("A1")
+
     ' For each row...
     For Y = 0 To ImageHeight - 1
+        ' For each column...
         For X = 0 To ImageWidth - 1
             ' Find the colors in [0, 1] range
             Dim R, G, B
@@ -41,10 +42,31 @@ Sub Render()
             IB = Int(255.999 * B)
 
             ' Color the cell
-            With Range("A1").Offset(Y, X).Interior
+            With A1Cell.Offset(Y, X).Interior
                 .Color = RGB(IR, IG, IB)
                 .Pattern = xlPatternSolid
             End With
         Next X
     Next Y
+End Sub
+
+Sub Benchmark()
+    ' Declare variables and save starting time in milliseconds
+    Dim StartTime, EndTime
+    StartTime = Int(Timer * 1000)
+
+    ' Start rendering
+    Call Render
+
+    ' Save ending time
+    EndTime = Int(Timer * 1000)
+
+    ' Calculate some variables
+    Dim PixelCount, Duration, PerPixelDuration
+    PixelCount = ImageWidth * ImageHeight
+    Duration = EndTime - StartTime
+    PerPixelDuration = Duration / PixelCount
+
+    ' Show how much it took
+    MsgBox("It took " & Duration & " milliseconds to paint " & PixelCount & " pixels. (" & PerPixelDuration & "ms/px)")
 End Sub
