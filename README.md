@@ -49,3 +49,26 @@ Set-ExecutionPolicy `
 ```
 
 [2]: https://www.hancom.com/product/productWindowsMain.do?gnb0=23&gnb1=29
+
+## How to run
+
+When built, the spreadsheet file should contain four macros:
+
+* `Init` macro to initialize the canvas,
+* `Render` macro to start rendering a scene,
+* `Benchmark` macro to measure how long it takes to render, and
+* `Sketch` macro as a "playground" macro.
+
+First, open the built `raytracing.cell` file.
+
+Then, go to `도구`, `매크로`, then `매크로 실행`.
+A popup should appear with the list of macros available.
+Select and run `Init` macro first, and then follow the same steps to run the
+`Render` macro.
+
+With ~~excruciatingly long~~ rendering time, your scene should be available!
+
+Note that due to single-threaded nature of Hancell macros, the rendering process
+_will_ block any interaction with the spreadsheet window.
+In order to see the rendering process, make sure to put the window on top and
+never change focus to another window.
