@@ -29,21 +29,13 @@ Sub Render()
     For Y = 0 To ImageHeight - 1
         ' For each column...
         For X = 0 To ImageWidth - 1
-            ' Find the colors in [0, 1] range
-            Dim R, G, B
-            R = X / (ImageWidth - 1)
-            G = Y / (ImageHeight - 1)
-            B = 0.25
-
-            ' Convert it into [0, 255] integer range
-            Dim IR, IG, IB
-            IR = Int(255.999 * R)
-            IG = Int(255.999 * G)
-            IB = Int(255.999 * B)
+            ' Create a color vector
+            Dim PixelColor
+            PixelColor = Vector_New(X / (ImageWidth - 1), Y / (ImageHeight - 1), 0.25)
 
             ' Color the cell
             With A1Cell.Offset(Y, X).Interior
-                .Color = RGB(IR, IG, IB)
+                .Color = Color_Vector2RGB(PixelColor)
                 .Pattern = xlPatternSolid
             End With
         Next X
