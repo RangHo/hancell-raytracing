@@ -111,3 +111,8 @@ Function Vector_Normalize(V)
     ' Return the normalized vector
     Vector_Normalize = Vector_Scale(V, 1 / Length)
 End Function
+
+''' Convert a vector to a string representation
+Function Vector_ToString(V)
+    Vector_ToString = "(" & Vector_X(V) & ", " & Vector_Y(V) & ", " & Vector_Z(V) & ")"
+End Function

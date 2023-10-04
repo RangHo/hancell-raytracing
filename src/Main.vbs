@@ -1,19 +1,5 @@
-''' Aspect ratio of the rendered image.
-Dim AspectRatio
-
-''' Width and height of the viewport.
-Dim ViewportWidth, ViewportHeight
-
 ''' Initialize the workbook for rendering.
 Sub Init()
-    ' Infer aspect ratio from the given image width and height
-    AspectRatio = ImageWidth / ImageHeight
-
-    ' From the aspect ratio, calculate the viewport ratio
-    ' (Note that the height is always 2.0)
-    ViewportHeight = 2.0
-    ViewportWidth = ViewportHeight * AspectRatio
-
     ' There should be two sheets: one for rendering and one for log output
     Sheets.Add
     Sheets(1).Name = "Output"
@@ -52,39 +38,58 @@ End Sub
 
 ''' Render the scene proper.
 Sub Render()
+    ' Infer aspect ratio from the given image width and height
+    Dim AspectRatio
+    AspectRatio = ImageWidth / ImageHeight
+
+    ' From the aspect ratio, calculate the viewport ratio
+    ' (Note that the height is always 2.0)
+    Dim ViewportWidth, ViewportHeight
+    ViewportHeight = 2.0
+    ViewportWidth = ViewportHeight * AspectRatio
+
+    ' Viewport helpers
+    Dim ViewportU, ViewportV
+    ViewportU = Vector_New(ViewportWidth, 0.0, 0.0)
+    ViewportV = Vector_New(0.0, -ViewportHeight, 0.0)
+
+    ' Per-pixel delta helpers
+    Dim PixelDeltaU, PixelDeltaV
+    PixelDeltaU = Vector_Scale(ViewportU, 1.0 / ImageWidth)
+    PixelDeltaV = Vector_Scale(ViewportV, 1.0 / ImageHeight)
+
+    ' Rendering helpers
+    ' ViewportOrigin = CameraOrigin - Vector(0, 0, FocalLength) - (ViewportU / 2) - (ViewportV / 2)
+    ' PixelOrigin = ViewportOrigin + (PixelDeltaU + PixelDeltaV) / 2
+    Dim CameraOrigin, ViewportOrigin, PixelOrigin
+    CameraOrigin = Vector_New(0.0, 0.0, 0.0)
+    ViewportOrigin = Vector_Subtract(Vector_Subtract(Vector_Subtract(CameraOrigin, Vector_New(0.0, 0.0, FocalLength)), Vector_Scale(ViewportU, 0.5)), Vector_Scale(ViewportV, 0.5))
+    PixelOrigin = Vector_Add(ViewportOrigin, Vector_Scale(Vector_Add(PixelDeltaU, PixelDeltaV), 0.5))
+
+    Debug_Log("ViewportU: " & Vector_ToString(ViewportU))
+    Debug_Log("ViewportV: " & Vector_ToString(ViewportV))
+    Debug_Log("PixelDeltaU: " & Vector_ToString(PixelDeltaU))
+    Debug_Log("PixelDeltaV: " & Vector_ToString(PixelDeltaV))
+    Debug_Log("ViewportOrigin: " & Vector_ToString(ViewportOrigin))
+    Debug_Log("PixelOrigin: " & Vector_ToString(PixelOrigin))
+
     ' Cache A1 cell
     Dim A1Cell
     Set A1Cell = Range("A1")
-
-    ' World coordinate helpers
-    Dim Origin, Horizontal, Vertical
-    Origin = Vector_New(0, 0, 0)
-    Horizontal = Vector_New(ViewportWidth, 0, 0)
-    Vertical = Vector_New(0, -ViewportHeight, 0)
-
-    ' Calculate the vector to the lower left corner of viewport
-    ' LowerLeftCorner = Origin - (Horizontal / 2) - (Vertical / 2) - Vector(0, 0, FocalLength)
-    LowerLeftCorner = Vector_Subtract(Vector_Subtract(Vector_Subtract(Origin, Vector_Scale(Horizontal, 0.5)), Vector_Scale(Vertical, 0.5)), Vector_New(0, 0, FocalLength))
 
     ' For each row...
     For Y = 0 To ImageHeight - 1
         ' For each column...
         For X = 0 To ImageWidth - 1
-            Debug_Log("Processing (" & X & ", " & Y & ")")
-
             ' U and V are ratio from the start of the coordinate
-            Dim U, V
-            U = X / (ImageWidth - 1)
-            V = Y / (ImageWidth - 1)
-
             ' Vector pointing at each pixel on the viewport
-            ' Destination = LowerLeftCorner + (Horizontal * U) + (Vertical * V) - Origin
+            ' Destination = PixelOrigin + PixelDeltaU * X + PixelDeltaV * V
             Dim Destination
-            Destination = Vector_Subtract(Vector_Add(Vector_Add(LowerLeftCorner, Vector_Scale(Horizontal, U)), Vector_Scale(Vertical, V)), Origin)
+            Destination = Vector_Add(PixelOrigin, Vector_Add(Vector_Scale(PixelDeltaU, X), Vector_Scale(PixelDeltaV, Y)))
 
             ' Construct a ray from camera origin to destination
             Dim R
-            R = Ray_New(Origin, Destination)
+            R = Ray_New(CameraOrigin, Destination)
 
             ' Create a color vector
             Dim PixelColor
