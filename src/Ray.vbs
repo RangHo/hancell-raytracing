@@ -32,6 +32,8 @@ Function Ray_Color(R)
     Dim T
     T = 0.5 * (Vector_Y(NormalizedDirection) + 1.0)
 
+    Debug_Log(T)
+
     ' Ray_Color = Vector(1, 1, 1) * (1.0 - T) + Vector(0.5, 0.7, 1.0) * T
     Ray_Color = Vector_Add(Vector_Scale(Vector_New(1, 1, 1), 1.0 - T), Vector_Scale(Vector_New(0.5, 0.7, 1.0), T))
 End Function

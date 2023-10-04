@@ -4,7 +4,7 @@ Dim AspectRatio
 ''' Width and height of the viewport.
 Dim ViewportWidth, ViewportHeight
 
-''' Initialize the spreadsheet for rendering.
+''' Initialize the workbook for rendering.
 Sub Init()
     ' Infer aspect ratio from the given image width and height
     AspectRatio = ImageWidth / ImageHeight
@@ -14,12 +14,29 @@ Sub Init()
     ViewportHeight = 2.0
     ViewportWidth = ViewportHeight * AspectRatio
 
-    ' Select all cells
+    ' There should be two sheets: one for rendering and one for log output
+    Sheets.Add
+    Sheets(1).Name = "Output"
+    Sheets(2).Name = "Log"
+
+    ' Select the log output sheet
+    Sheets("Log").Select
+
+    ' Merge all cells
     Cells.Select
+    With Selection
+        .HorizontalAlignment = xlGeneral
+        .VerticalAlignment = xlTop
+        .MergeCells = True
+    End With
+
+    ' Select the output sheet
+    Sheets("Output").Select
 
     ' Set the column and row size to 14px x 14px
     ' This size is less than ideal, but somehow Hancell shits itself when column
     ' width is less than 1 and mysteriously adds 0.13 to the width so... yeah
+    Cells.Select
     Selection.ColumnWidth = 1.00 ' (+ mysterious 0.13) = 14px
     Selection.RowHeight = 10.50 ' = 14px
 
@@ -53,6 +70,8 @@ Sub Render()
     For Y = 0 To ImageHeight - 1
         ' For each column...
         For X = 0 To ImageWidth - 1
+            Debug_Log("Processing (" & X & ", " & Y & ")")
+
             ' U and V are ratio from the start of the coordinate
             Dim U, V
             U = X / (ImageWidth - 1)
