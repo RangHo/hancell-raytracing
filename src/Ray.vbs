@@ -24,14 +24,18 @@ End Function
 
 ''' Get the color of the ray
 Function Ray_Color(R)
-    ' Find the normalized version of the direction vector
-    Dim NormalizedDirection
-    NormalizedDirection = Vector_Normalize(Ray_Direction(R))
+    If Sphere_Hit(Vector_New(0.0, 0.0, -1.0), 0.5, R) Then
+        Ray_Color = Vector_New(1.0, 0.0, 0.0)
+    Else
+        ' Find the normalized version of the direction vector
+        Dim NormalizedDirection
+        NormalizedDirection = Vector_Normalize(Ray_Direction(R))
 
-    ' Based on the normalized Y position, perform linear interpolation
-    Dim T
-    T = 0.5 * (Vector_Y(NormalizedDirection) + 1.0)
+        ' Based on the normalized Y position, perform linear interpolation
+        Dim T
+        T = 0.5 * (Vector_Y(NormalizedDirection) + 1.0)
 
-    ' Ray_Color = Vector(1, 1, 1) * (1.0 - T) + Vector(0.5, 0.7, 1.0) * T
-    Ray_Color = Vector_Add(Vector_Scale(Vector_New(1, 1, 1), 1.0 - T), Vector_Scale(Vector_New(0.5, 0.7, 1.0), T))
+        ' Ray_Color = Vector(1, 1, 1) * (1.0 - T) + Vector(0.5, 0.7, 1.0) * T
+        Ray_Color = Vector_Add(Vector_Scale(Vector_New(1, 1, 1), 1.0 - T), Vector_Scale(Vector_New(0.5, 0.7, 1.0), T))
+    End If
 End Function
