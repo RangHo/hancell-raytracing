@@ -5,17 +5,6 @@ Sub Init()
     Sheets(1).Name = "Output"
     Sheets(2).Name = "Log"
 
-    ' Select the log output sheet
-    Sheets("Log").Select
-
-    ' Merge all cells
-    Cells.Select
-    With Selection
-        .HorizontalAlignment = xlGeneral
-        .VerticalAlignment = xlTop
-        .MergeCells = True
-    End With
-
     ' Select the output sheet
     Sheets("Output").Select
 

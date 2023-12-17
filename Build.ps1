@@ -41,7 +41,7 @@ function Add-HCellMacroModule
         $Content = "Attribute VB_Name = `"$Name`"`r`n" + $Content
 
         Write-Verbose "    Adding the macro module to the workbook..."
-        $module = $Workbook.ScriptObjects.Add(4, $Name, $Content)
+        $Workbook.ScriptObjects.Add(4, $Name, $Content)
 
         return
     }

@@ -1,5 +1,5 @@
 ''' Cell to dump the log outputs.
-Dim LogOutputCell
+Dim LogOutputRow
 
 ''' Determine the string representation of simple VarType indices.
 '''
@@ -66,18 +66,20 @@ End Function
 Function Debug_Log(Content)
     ' Log only when debugging
     If IsDebugging Then
-        ' Check if the debug output dump is configured
-        If VarType(LogOutputCell) = 0 Then
-            ' LogOutputCell is not initialized, so let's get that first
-            Set LogOutputCell = Sheets("Log").Range("A1")
+        ' Check if the LogOutputRow is initialized
+        If VarType(LogOutputRow) = 0 Then
+            ' Initialize the LogOutputRow
+            LogOutputRow = 1
         End If
 
-        ' Previous content
-        Dim PreviousContent
-        PreviousContent = LogOutputCell.Formula
+        ' Merge the current row
+        Sheets("Log").Range("A" & LogOutputRow & ":Z" & LogOutputRow).MergeCells = True
 
-        ' Update content
-        LogOutputCell.Formula = PreviousContent & Content & vbNewline
+        ' Write the content to the merged cell
+        Sheets("Log").Range("A" & LogOutputRow).Formula = Content
+
+        ' Bump to the next row
+        LogOutputRow = LogOutputRow + 1
     End If
 End Function
 
