@@ -55,7 +55,7 @@ Function Debug_VarTypeToString(VarTypeIndex)
 
         Debug_VarTypeToString = "Array of " & ContentTypeString
     Else
-        Debug_VarTypeToString = Debug__VarTypeString_Simple(ContentTypeIndex)
+        Debug_VarTypeToString = Debug__VarTypeToString_Simple(ContentTypeIndex)
     End If
 End Function
 
