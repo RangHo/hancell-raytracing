@@ -31,7 +31,7 @@ Function Ray_Color(R, World)
 
     If HitResult_IsHit(HitResult) Then
         Dim N
-        N = Vector_Normalize(Vector_Subtract(Ray_At(R, HitResult_T(HitResult)), Vector_New(0.0, 0.0, -1.0)))
+        N = HitResult_FaceNormal(HitResult, R)
         Ray_Color = Vector_Scale(Vector_New(Vector_X(N) + 1.0, Vector_Y(N) + 1.0, Vector_Z(N) + 1.0), 0.5)
     Else
         ' Find the normalized version of the direction vector
