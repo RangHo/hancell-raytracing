@@ -23,13 +23,15 @@ Function Ray_At(R, T)
 End Function
 
 ''' Get the color of the ray
-Function Ray_Color(R)
-    Dim T
-    T = Sphere_Hit(Vector_New(0.0, 0.0, -1.0), 0.5, R)
+Function Ray_Color(R, World)
+    Debug_Log("Ray_Color: Enter")
 
-    If T > 0.0 Then
+    Dim HitResult
+    HitResult = Hit(World, R, 0.0, 1000.0)
+
+    If HitResult_IsHit(HitResult) Then
         Dim N
-        N = Vector_Normalize(Vector_Subtract(Ray_At(R, T), Vector_New(0.0, 0.0, -1.0)))
+        N = Vector_Normalize(Vector_Subtract(Ray_At(R, HitResult_T(HitResult)), Vector_New(0.0, 0.0, -1.0)))
         Ray_Color = Vector_Scale(Vector_New(Vector_X(N) + 1.0, Vector_Y(N) + 1.0, Vector_Z(N) + 1.0), 0.5)
     Else
         ' Find the normalized version of the direction vector
@@ -37,9 +39,12 @@ Function Ray_Color(R)
         NormalizedDirection = Vector_Normalize(Ray_Direction(R))
 
         ' Based on the normalized Y position, perform linear interpolation
+        Dim T
         T = 0.5 * (Vector_Y(NormalizedDirection) + 1.0)
 
         ' Ray_Color = Vector(1, 1, 1) * (1.0 - T) + Vector(0.5, 0.7, 1.0) * T
         Ray_Color = Vector_Add(Vector_Scale(Vector_New(1, 1, 1), 1.0 - T), Vector_Scale(Vector_New(0.5, 0.7, 1.0), T))
     End If
+
+    Debug_Log("Ray_Color: Exit")
 End Function

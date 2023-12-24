@@ -1,15 +1,56 @@
+''' Get the center of the sphere.
+Function Sphere_Center(Sphere)
+    Sphere_Center = Sphere(1)
+End Function
+
+''' Get the radius of the sphere.
+Function Sphere_Radius(Sphere)
+    Sphere_Radius = Sphere(2)
+End Function
+
+''' Create a new sphere.
+Function Sphere_New(Center, Radius)
+    Dim Result(3)
+    Result(0) = "Sphere"
+    Result(1) = Center
+    Result(2) = Radius
+
+    Sphere_New = Result
+End Function
+
 ''' Hit a sphere.
-Function Sphere_Hit(Center, Radius, Ray)
-    Dim OC, A, BHalf, C, D
+Function Sphere_Hit(Sphere, Ray, TMin, TMax)
+    Dim Center, Radius, OC, A, BHalf, C, D
+    Center = Sphere_Center(Sphere)
+    Radius = Sphere_Radius(Sphere)
     OC = Vector_Subtract(Ray_Origin(Ray), Center)
     A = Vector_Dot(Ray_Direction(Ray), Ray_Direction(Ray))
     BHalf = Vector_Dot(OC, Ray_Direction(Ray))
     C = Vector_Dot(OC, OC) - (Radius * Radius)
     D = (BHalf * BHalf) - (A * C)
+    Debug_Log("Sphere_Hit: Discriminant = " & D)
 
     If D > 0.0 Then
-        Sphere_Hit = (-BHalf - Sqr(D)) / A
+        Debug_Log("Sphere_Hit: Intersecting ray")
+        Dim SqrtD, Root, HitPoint, HitNormal
+        SqrtD = Sqr(D)
+        Root = (-BHalf - SqrtD) / A
+
+        If Root < TMin Or TMax < Root Then
+            Root = (-BHalf + SqrtD) / A
+
+            If Root < TMin Or TMax < Root Then
+                Sphere_Hit = HitResult_Miss()
+                Exit Function
+            End If
+        End If
+
+        HitPoint = Ray_At(Ray, Root)
+        HitNormal = Vector_Scale(Vector_Subtract(HitPoint, Center), 1.0 / Radius)
+
+        Sphere_Hit = HitResult_Hit(HitPoint, HitNormal, Root)
     Else
-        Sphere_Hit = -1.0
+        Debug_Log("Sphere_Hit: Missing ray")
+        Sphere_Hit = HitResult_Miss()
     End If
 End Function
