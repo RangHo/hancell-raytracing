@@ -103,7 +103,6 @@ Sub Render()
             ' Create a color vector
             Dim PixelColor
             PixelColor = Ray_Color(R, World)
-
             Debug_Log("Render: Color of (" & X & ", " & Y & "): " & Vector_ToString(PixelColor))
 
             ' Color the cell
