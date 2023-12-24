@@ -31,6 +31,9 @@ Sub Init()
     ' Move the selection out of the way
     Range("A1").Offset(ImageHeight, ImageWidth).Select
 
+    ' Set the current zoom level to 25%
+    ActiveWindow.Zoom = 25
+
     ' Mark the workbook as initialized
     Initialized = True
 End Sub
