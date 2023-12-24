@@ -1,11 +1,16 @@
 ''' Whether debug logging is enabled.
 Public Const IsDebugging = True
 
+Public Const ImageScale = 6
+
 ''' Width of the image.
-Public Const ImageWidth = 48
+Public Const ImageWidth = 16 * ImageScale
 
 ''' Height of the image.
-Public Const ImageHeight = 27
+Public Const ImageHeight = 9 * ImageScale
 
 ''' Focul length of the camera.
 Public Const FocalLength = 1.0
+
+''' Number of samples per pixel; i.e. antialiasing coefficient.
+Public Const SamplesPerPixel = 4
