@@ -43,36 +43,11 @@ Sub Render()
     Dim AspectRatio
     AspectRatio = ImageWidth / ImageHeight
 
-    ' From the aspect ratio, calculate the viewport ratio
-    ' (Note that the height is always 2.0)
-    Dim ViewportWidth, ViewportHeight
-    ViewportHeight = 2.0
-    ViewportWidth = ViewportHeight * AspectRatio
-
-    ' Viewport helpers
-    Dim ViewportU, ViewportV
-    ViewportU = Vector_New(ViewportWidth, 0.0, 0.0)
-    ViewportV = Vector_New(0.0, -ViewportHeight, 0.0)
-    Debug_Log("Render: ViewportU is " & Vector_ToString(ViewportU))
-    Debug_Log("Render: ViewportV is " & Vector_ToString(ViewportV))
-
-    ' Per-pixel delta helpers
-    Dim PixelDeltaU, PixelDeltaV
-    PixelDeltaU = Vector_Scale(ViewportU, 1.0 / ImageWidth)
-    PixelDeltaV = Vector_Scale(ViewportV, 1.0 / ImageHeight)
-    Debug_Log("Render: PixelDeltaU is " & Vector_ToString(PixelDeltaU))
-    Debug_Log("Render: PixelDeltaV is " & Vector_ToString(PixelDeltaV))
-
-    ' Rendering helpers
-    ' ViewportOrigin = CameraOrigin - Vector(0, 0, FocalLength) - (ViewportU / 2) - (ViewportV / 2)
-    ' PixelOrigin = ViewportOrigin + (PixelDeltaU + PixelDeltaV) / 2
-    Dim CameraOrigin, ViewportOrigin, PixelOrigin
+    ' Create a camera with the given aspect ratio
+    Dim CameraOrigin, CameraFocalLength, Camera
     CameraOrigin = Vector_New(0.0, 0.0, 0.0)
-    ViewportOrigin = Vector_Subtract(Vector_Subtract(Vector_Subtract(CameraOrigin, Vector_New(0.0, 0.0, FocalLength)), Vector_Scale(ViewportU, 0.5)), Vector_Scale(ViewportV, 0.5))
-    PixelOrigin = Vector_Add(ViewportOrigin, Vector_Scale(Vector_Add(PixelDeltaU, PixelDeltaV), 0.5))
-    Debug_Log("Render: CameraOrigin is " & Vector_ToString(CameraOrigin))
-    Debug_Log("Render: ViewportOrigin is " & Vector_ToString(ViewportOrigin))
-    Debug_Log("Render: PixelOrigin is " & Vector_ToString(PixelOrigin))
+    CameraFocalLength = 1.0
+    Camera = Camera_New(CameraOrigin, CameraFocalLength, AspectRatio)
 
     ' Define the world
     Dim WorldObjects(2), World
@@ -90,19 +65,35 @@ Sub Render()
         For X = 0 To ImageWidth - 1
             Debug_Log("Render: Rendering (" & X & ", " & Y & ")...")
 
-            ' U and V are ratio from the start of the coordinate
-            ' Vector pointing at each pixel on the viewport
-            ' Destination = PixelOrigin + PixelDeltaU * X + PixelDeltaV * V
-            Dim Destination
-            Destination = Vector_Add(PixelOrigin, Vector_Add(Vector_Scale(PixelDeltaU, X), Vector_Scale(PixelDeltaV, Y)))
-
-            ' Construct a ray from camera origin to destination
-            Dim R
-            R = Ray_New(CameraOrigin, Destination)
-
-            ' Create a color vector
+            ' Initialize the pixel color
             Dim PixelColor
-            PixelColor = Ray_Color(R, World)
+            PixelColor = Vector_New(0.0, 0.0, 0.0)
+
+            ' For each sample...
+            For Sample = 0 To SamplesPerPixel - 1
+                Dim U, V
+                U = X
+                V = (ImageHeight - 1) - Y
+
+                ' Add a random offset to the pixel if there are more than one sample
+                If SamplesPerPixel > 1 Then
+                    U = U + Rnd()
+                    V = V + Rnd()
+                End If
+
+                ' Normalize the pixel coordinate
+                U = U / (ImageWidth - 1)
+                V = V / (ImageHeight - 1)
+
+                ' Get a ray from the camera to the pixel
+                Dim R
+                R = Camera_GetRay(Camera, U, V)
+
+                ' Accumulate the color
+                PixelColor = Vector_Add(PixelColor, Ray_Color(R, World))
+            Next Sample
+
+            PixelColor = Vector_Scale(PixelColor, 1.0 / SamplesPerPixel)
             Debug_Log("Render: Color of (" & X & ", " & Y & "): " & Vector_ToString(PixelColor))
 
             ' Color the cell

@@ -88,5 +88,11 @@ foreach ($file in $inputs)
 # Path of the output file
 $output = "raytracing.cell"
 
+# If the output file already exists in document folder, delete it
+if (Test-Path "$HOME\Documents\$output")
+{
+    Remove-Item "$HOME\Documents\$output"
+}
+
 # Save the workbook
 Save-HCellWorkbook -Workbook $workbook -Path $output
