@@ -1,3 +1,30 @@
+''' Create a new hit result.
+Function HitResult_New(IsHit, Point, Normal, T)
+    Dim Result(4)
+    Result(0) = IsHit
+    Result(1) = Point
+    Result(2) = Normal
+    Result(3) = T
+
+    HitResult_New = Result
+End Function
+
+''' Create a new "hit" hit result.
+Function HitResult_Hit(Point, Normal, T)
+    Dim Result
+    Result = HitResult_New(True, Point, Normal, T)
+
+    HitResult_Hit = Result
+End Function
+
+''' Create a new "missed" hit result.
+Function HitResult_Miss()
+    Dim Result
+    Result = HitResult_New(False, Vector_New(0, 0, 0), Vector_New(0, 0, 0), 0)
+
+    HitResult_Miss = Result
+End Function
+
 ''' Check if the hit result contains a valid hit.
 Function HitResult_IsHit(HitResult)
     HitResult_IsHit = HitResult(0)
@@ -28,28 +55,6 @@ Function HitResult_FaceNormal(HitResult, Ray)
     Else
         HitResult_FaceNormal = Vector_Scale(HitResult_Normal(HitResult), -1.0)
     End If
-End Function
-
-''' Create a new "hit" hit result.
-Function HitResult_Hit(Point, Normal, T)
-    Dim Result(4)
-    Result(0) = True
-    Result(1) = Point
-    Result(2) = Normal
-    Result(3) = T
-
-    HitResult_Hit = Result
-End Function
-
-''' Create a new "missed" hit result.
-Function HitResult_Miss()
-    Dim Result(4)
-    Result(0) = False
-    Result(1) = Vector_New(0.0, 0.0, 0.0)
-    Result(2) = Vector_New(0.0, 0.0, 0.0)
-    Result(3) = 0.0
-
-    HitResult_Miss = Result
 End Function
 
 ''' Get the type string of the hittable object.

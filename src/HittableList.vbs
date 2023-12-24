@@ -1,11 +1,3 @@
-Function HittableList_Objects(HittableList)
-    HittableList_Objects = HittableList(1)
-End Function
-
-Function HittableList_Length(HittableList)
-    HittableList_Length = HittableList(2)
-End Function
-
 ''' Create a new list of hittable objects.
 Function HittableList_New(Objects)
     Dim Result(2)
@@ -13,6 +5,11 @@ Function HittableList_New(Objects)
     Result(1) = Objects
 
     HittableList_New = Result
+End Function
+
+''' Get the list of hittable objects in the list.
+Function HittableList_Objects(HittableList)
+    HittableList_Objects = HittableList(1)
 End Function
 
 ''' Hit a list of hittable objects.

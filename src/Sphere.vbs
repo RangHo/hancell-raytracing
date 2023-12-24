@@ -1,13 +1,3 @@
-''' Get the center of the sphere.
-Function Sphere_Center(Sphere)
-    Sphere_Center = Sphere(1)
-End Function
-
-''' Get the radius of the sphere.
-Function Sphere_Radius(Sphere)
-    Sphere_Radius = Sphere(2)
-End Function
-
 ''' Create a new sphere.
 Function Sphere_New(Center, Radius)
     Dim Result(3)
@@ -16,6 +6,16 @@ Function Sphere_New(Center, Radius)
     Result(2) = Radius
 
     Sphere_New = Result
+End Function
+
+''' Get the center of the sphere.
+Function Sphere_Center(Sphere)
+    Sphere_Center = Sphere(1)
+End Function
+
+''' Get the radius of the sphere.
+Function Sphere_Radius(Sphere)
+    Sphere_Radius = Sphere(2)
 End Function
 
 ''' Hit a sphere.

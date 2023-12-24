@@ -1,3 +1,15 @@
+''' Allocate a new 3D vector.
+Function Vector_New(X, Y, Z)
+    ' Allocate new array
+    Dim Result(3)
+    Result(1) = X
+    Result(2) = Y
+    Result(3) = Z
+
+    ' Return the array
+    Vector_New = Result
+End Function
+
 ''' Get the X component of the vector.
 Function Vector_X(V)
     Vector_X = V(1)
@@ -11,18 +23,6 @@ End Function
 ''' Get the Z component of the vector.
 Function Vector_Z(V)
     Vector_Z = V(3)
-End Function
-
-''' Allocate a new 3D vector.
-Function Vector_New(X, Y, Z)
-    ' Allocate new array
-    Dim Result(3)
-    Result(1) = X
-    Result(2) = Y
-    Result(3) = Z
-
-    ' Return the array
-    Vector_New = Result
 End Function
 
 ''' Add two vectors together.
