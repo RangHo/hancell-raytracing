@@ -2,7 +2,7 @@
 Public Const IsDebugging = False
 
 ''' Scale of the 16:9 image.
-Public Const ImageScale = 6
+Public Const ImageScale = 3
 
 ''' Width of the image.
 Public Const ImageWidth = 16 * ImageScale

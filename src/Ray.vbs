@@ -1,3 +1,6 @@
+''' Maximum recursion depth for Ray_Color_Recursive
+Const Ray_MaxDepth = 32
+
 ''' Create a new ray.
 Function Ray_New(Origin, Direction)
     Dim Result(2)
@@ -23,16 +26,17 @@ Function Ray_At(R, T)
 End Function
 
 ''' Get the color of the ray
-Function Ray_Color(R, World)
+Function Ray_Color(R, World, Optional Depth = 0)
     Debug_Log("Ray_Color: Enter")
 
     Dim HitResult
-    HitResult = Hit(World, R, 0.0, 1000.0)
+    HitResult = Hit(World, R, 0, 1000.0)
 
     If HitResult_IsHit(HitResult) Then
-        Dim N
-        N = HitResult_FaceNormal(HitResult, R)
-        Ray_Color = Vector_Scale(Vector_New(Vector_X(N) + 1.0, Vector_Y(N) + 1.0, Vector_Z(N) + 1.0), 0.5)
+        Dim Target, NewRay
+        Target = Vector_Add(Vector_Add(HitResult_Point(HitResult), HitResult_Normal(HitResult)), Math_RandomVector())
+        NewRay = Ray_New(HitResult_Point(HitResult), Vector_Subtract(Target, HitResult_Point(HitResult)))
+        Ray_Color = Vector_Scale(Ray_Color_Recursive(NewRay, World, Depth + 1), 0.5)
     Else
         ' Find the normalized version of the direction vector
         Dim NormalizedDirection
@@ -47,4 +51,15 @@ Function Ray_Color(R, World)
     End If
 
     Debug_Log("Ray_Color: Exit")
+End Function
+
+''' Stub function to recursively call Ray_Color.
+Function Ray_Color_Recursive(R, World, Depth)
+    If Depth >= Ray_MaxDepth Then
+        Debug_Log("Ray_Color_Recursive: Maximum recursion depth reached")
+        Ray_Color_Recursive = Vector_New(0, 0, 0)
+        Exit Function
+    End If
+
+    Ray_Color_Recursive = Ray_Color(R, World, Depth)
 End Function
