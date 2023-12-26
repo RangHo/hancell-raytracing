@@ -53,11 +53,17 @@ Sub Render()
     Camera = Camera_New(CameraOrigin, CameraFocalLength, AspectRatio)
 
     ' Define the world
-    Dim WorldObjects(2), World, LambertianPink, LambertianYellow
-    LambertianPink = Lambertian_New(Vector_New(0.8, 0.3, 0.3))
-    LambertianYellow = Lambertian_New(Vector_New(0.8, 0.8, 0.0))
-    WorldObjects(1) = Sphere_New(Vector_New(0.0, 0.0, -1.0), 0.5, LambertianPink)
-    WorldObjects(2) = Sphere_New(Vector_New(0.0, -100.5, -1.0), 100.0, LambertianYellow)
+    Dim GroundMaterial, LeftMaterial, CenterMaterial, RightMaterial
+    GroundMaterial = Lambertian_New(Vector_New(0.8, 0.8, 0.0))
+    LeftMaterial = Metal_New(Vector_New(0.8, 0.8, 0.8))
+    CenterMaterial = Lambertian_New(Vector_New(0.7, 0.3, 0.3))
+    RightMaterial = Metal_New(Vector_New(0.8, 0.6, 0.2))
+
+    Dim WorldObjects(4), World
+    WorldObjects(1) = Sphere_New(Vector_New(0.0, -100.5, -1.0), 100.0, GroundMaterial)
+    WorldObjects(2) = Sphere_New(Vector_New(-1.0, 0.0, -1.0), 0.5, LeftMaterial)
+    WorldObjects(3) = Sphere_New(Vector_New(0.0, 0.0, -1.0), 0.5, CenterMaterial)
+    WorldObjects(4) = Sphere_New(Vector_New(1.0, 0.0, -1.0), 0.5, RightMaterial)
     World = HittableList_New(WorldObjects)
 
     ' Cache A1 cell

@@ -17,7 +17,8 @@ Function Lambertian_Scatter(Lambertian, IncidentRay, HitResult)
     ScatterDirection = Vector_Add(HitResult_Normal(HitResult), Math_RandomUnitVector())
 
     ' Catch degenerate scatter direction
-    If Math_VectorIsNearZero(ScatterDirection) Then
+    If Math_IsNearZeroVector(ScatterDirection) Then
+        Debug_Log("Lambertian_Scatter: Degenerate scatter direction detected")
         ScatterDirection = HitResult_Normal(HitResult)
     End If
 

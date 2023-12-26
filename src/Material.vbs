@@ -47,6 +47,8 @@ Function Scatter(Material, IncidentRay, HitResult)
     Select Case Material_Type(Material)
         Case "Lambertian"
             Scatter = Lambertian_Scatter(Material, IncidentRay, HitResult)
+        Case "Metal"
+            Scatter = Metal_Scatter(Material, IncidentRay, HitResult)
         Case Else
             Debug_Log("Scatter: Unknown material type")
             Scatter = ScatterResult_Absorb()

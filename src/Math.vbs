@@ -29,10 +29,15 @@ Function Math_RandomVector()
 End Function
 
 ''' Check if a vector is near zero in all dimensions.
-Function Math_VectorIsNearZero(V)
+Function Math_IsNearZeroVector(V)
     Dim XIsZero, YIsZero, ZIsZero
     XIsZero = Abs(Vector_X(V)) < Math_Epsilon
     YIsZero = Abs(Vector_Y(V)) < Math_Epsilon
     ZIsZero = Abs(Vector_Z(V)) < Math_Epsilon
-    Math_VectorIsNearZero = XIsZero And YIsZero And ZIsZero
+    Math_IsNearZeroVector = XIsZero And YIsZero And ZIsZero
+End Function
+
+''' Calculate the reflect vector of a vector.
+Function Math_ReflectVector(V, N)
+    Math_ReflectVector = Vector_Subtract(V, Vector_Scale(N, 2 * Vector_Dot(V, N)))
 End Function
