@@ -34,10 +34,9 @@ Function Sphere_Hit(Sphere, Ray, TMin, TMax)
     BHalf = Vector_Dot(OC, Ray_Direction(Ray))
     C = Vector_Dot(OC, OC) - (Radius * Radius)
     D = (BHalf * BHalf) - (A * C)
-    Debug_Log("Sphere_Hit: Discriminant = " & D)
 
     If D > 0.0 Then
-        Debug_Log("Sphere_Hit: Intersecting ray")
+        Debug_Log("Sphere_Hit: Intersecting ray with discriminant " & D)
         Dim SqrtD, Root, HitPoint, HitNormal, HitMaterial
         SqrtD = Sqr(D)
         Root = (-BHalf - SqrtD) / A
@@ -57,7 +56,7 @@ Function Sphere_Hit(Sphere, Ray, TMin, TMax)
 
         Sphere_Hit = HitResult_Hit(HitPoint, HitNormal, Root, HitMaterial)
     Else
-        Debug_Log("Sphere_Hit: Missing ray")
+        Debug_Log("Sphere_Hit: Missing ray with discriminant " & D)
         Sphere_Hit = HitResult_Miss()
     End If
 End Function

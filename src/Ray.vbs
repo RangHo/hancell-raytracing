@@ -27,8 +27,6 @@ End Function
 
 ''' Get the color of the ray
 Function Ray_Color(R, World, Optional Depth = 0)
-    Debug_Log("Ray_Color: Enter")
-
     Dim HitResult
     HitResult = Hit(World, R, 0.01, 1000.0)
 
@@ -59,8 +57,6 @@ Function Ray_Color(R, World, Optional Depth = 0)
         ' Ray_Color = Vector(1, 1, 1) * (1.0 - T) + Vector(0.5, 0.7, 1.0) * T
         Ray_Color = Vector_Add(Vector_Scale(Vector_New(1, 1, 1), 1.0 - T), Vector_Scale(Vector_New(0.5, 0.7, 1.0), T))
     End If
-
-    Debug_Log("Ray_Color: Exit")
 End Function
 
 ''' Stub function to recursively call Ray_Color.
