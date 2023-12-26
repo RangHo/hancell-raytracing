@@ -55,9 +55,9 @@ Sub Render()
     ' Define the world
     Dim GroundMaterial, LeftMaterial, CenterMaterial, RightMaterial
     GroundMaterial = Lambertian_New(Vector_New(0.8, 0.8, 0.0))
-    LeftMaterial = Metal_New(Vector_New(0.8, 0.8, 0.8))
+    LeftMaterial = Metal_New(Vector_New(0.8, 0.8, 0.8), 0.3)
     CenterMaterial = Lambertian_New(Vector_New(0.7, 0.3, 0.3))
-    RightMaterial = Metal_New(Vector_New(0.8, 0.6, 0.2))
+    RightMaterial = Metal_New(Vector_New(0.8, 0.6, 0.2), 1.0)
 
     Dim WorldObjects(4), World
     WorldObjects(1) = Sphere_New(Vector_New(0.0, -100.5, -1.0), 100.0, GroundMaterial)
