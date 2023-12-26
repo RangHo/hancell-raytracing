@@ -1,9 +1,10 @@
 ''' Create a new sphere.
-Function Sphere_New(Center, Radius)
+Function Sphere_New(Center, Radius, Material)
     Dim Result(3)
     Result(0) = "Sphere"
     Result(1) = Center
     Result(2) = Radius
+    Result(3) = Material
 
     Sphere_New = Result
 End Function
@@ -16,6 +17,11 @@ End Function
 ''' Get the radius of the sphere.
 Function Sphere_Radius(Sphere)
     Sphere_Radius = Sphere(2)
+End Function
+
+''' Get the material of the sphere.
+Function Sphere_Material(Sphere)
+    Sphere_Material = Sphere(3)
 End Function
 
 ''' Hit a sphere.
@@ -32,7 +38,7 @@ Function Sphere_Hit(Sphere, Ray, TMin, TMax)
 
     If D > 0.0 Then
         Debug_Log("Sphere_Hit: Intersecting ray")
-        Dim SqrtD, Root, HitPoint, HitNormal
+        Dim SqrtD, Root, HitPoint, HitNormal, HitMaterial
         SqrtD = Sqr(D)
         Root = (-BHalf - SqrtD) / A
 
@@ -47,8 +53,9 @@ Function Sphere_Hit(Sphere, Ray, TMin, TMax)
 
         HitPoint = Ray_At(Ray, Root)
         HitNormal = Vector_Scale(Vector_Subtract(HitPoint, Center), 1.0 / Radius)
+        HitMaterial = Sphere_Material(Sphere)
 
-        Sphere_Hit = HitResult_Hit(HitPoint, HitNormal, Root)
+        Sphere_Hit = HitResult_Hit(HitPoint, HitNormal, Root, HitMaterial)
     Else
         Debug_Log("Sphere_Hit: Missing ray")
         Sphere_Hit = HitResult_Miss()

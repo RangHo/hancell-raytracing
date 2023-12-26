@@ -1,18 +1,19 @@
 ''' Create a new hit result.
-Function HitResult_New(IsHit, Point, Normal, T)
+Function HitResult_New(IsHit, Point, Normal, T, Material)
     Dim Result(4)
     Result(0) = IsHit
     Result(1) = Point
     Result(2) = Normal
     Result(3) = T
+    Result(4) = Material
 
     HitResult_New = Result
 End Function
 
 ''' Create a new "hit" hit result.
-Function HitResult_Hit(Point, Normal, T)
+Function HitResult_Hit(Point, Normal, T, Material)
     Dim Result
-    Result = HitResult_New(True, Point, Normal, T)
+    Result = HitResult_New(True, Point, Normal, T, Material)
 
     HitResult_Hit = Result
 End Function
@@ -20,7 +21,7 @@ End Function
 ''' Create a new "missed" hit result.
 Function HitResult_Miss()
     Dim Result
-    Result = HitResult_New(False, Vector_New(0, 0, 0), Vector_New(0, 0, 0), 0)
+    Result = HitResult_New(False, Vector_New(0, 0, 0), Vector_New(0, 0, 0), 0, Null)
 
     HitResult_Miss = Result
 End Function
@@ -43,6 +44,11 @@ End Function
 ''' Get the T value of the hit.
 Function HitResult_T(HitResult)
     HitResult_T = HitResult(3)
+End Function
+
+''' Get the material of the hit object.
+Function HitResult_Material(HitResult)
+    HitResult_Material = HitResult(4)
 End Function
 
 ''' Get the face normal of the hit point.

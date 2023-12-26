@@ -33,11 +33,21 @@ Function Ray_Color(R, World, Optional Depth = 0)
     HitResult = Hit(World, R, 0.01, 1000.0)
 
     If HitResult_IsHit(HitResult) Then
-        Dim Target, NewRay
-        Target = Vector_Add(Vector_Add(HitResult_Point(HitResult), HitResult_Normal(HitResult)), Math_RandomVector())
-        NewRay = Ray_New(HitResult_Point(HitResult), Vector_Subtract(Target, HitResult_Point(HitResult)))
-        Ray_Color = Vector_Scale(Ray_Color_Recursive(NewRay, World, Depth + 1), 0.5)
+        ' Something was hit, so delegate color calculation to the material
+        Dim Material, ScatterResult, Target, NewRay
+        Material = HitResult_Material(HitResult)
+        ScatterResult = Scatter(Material, R, HitResult)
+
+        If ScatterResult_IsScattered(ScatterResult) Then
+            Dim ScatteredRay, Attenuation
+            ScatteredRay = ScatterResult_ScatteredRay(ScatterResult)
+            Attenuation = ScatterResult_Attenuation(ScatterResult)
+            Ray_Color = Vector_Hadamard(Ray_Color_Recursive(ScatteredRay, World, Depth + 1), Attenuation)
+        Else
+            Ray_Color = Vector_New(0, 0, 0)
+        End If
     Else
+        ' Nothing was hit, so drawing a skybox
         ' Find the normalized version of the direction vector
         Dim NormalizedDirection
         NormalizedDirection = Vector_Normalize(Ray_Direction(R))

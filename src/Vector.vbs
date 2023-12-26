@@ -85,6 +85,18 @@ Function Vector_Cross(LHS, RHS)
     Vector_Cross = Vector_New(X, Y, Z)
 End Function
 
+''' Calculate the element-wise product of two vectors.
+Function Vector_Hadamard(LHS, RHS)
+    ' Calculate each component
+    Dim X, Y, Z
+    X = Vector_X(LHS) * Vector_X(RHS)
+    Y = Vector_Y(LHS) * Vector_Y(RHS)
+    Z = Vector_Z(LHS) * Vector_Z(RHS)
+
+    ' Return the element-wise product
+    Vector_Hadamard = Vector_New(X, Y, Z)
+End Function
+
 ''' Calculate the squared length of the vector.
 Function Vector_LengthSquared(V)
     ' Calculate each component
