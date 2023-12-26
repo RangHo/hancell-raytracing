@@ -96,7 +96,11 @@ Sub Render()
                 PixelColor = Vector_Add(PixelColor, Ray_Color(R, World))
             Next Sample
 
-            PixelColor = Vector_Scale(PixelColor, 1.0 / SamplesPerPixel)
+            Dim PixelColorX, PixelColorY, PixelColorZ
+            PixelColorX = Sqr(Vector_X(PixelColor) / SamplesPerPixel)
+            PixelColorY = Sqr(Vector_Y(PixelColor) / SamplesPerPixel)
+            PixelColorZ = Sqr(Vector_Z(PixelColor) / SamplesPerPixel)
+            PixelColor = Vector_New(PixelColorX, PixelColorY, PixelColorZ)
             Debug_Log("Render: Color of (" & X & ", " & Y & "): " & Vector_ToString(PixelColor))
 
             ' Color the cell

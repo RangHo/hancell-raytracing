@@ -1,5 +1,5 @@
 ''' Maximum recursion depth for Ray_Color_Recursive
-Const Ray_MaxDepth = 32
+Const Ray_MaxDepth = 64
 
 ''' Create a new ray.
 Function Ray_New(Origin, Direction)
@@ -30,7 +30,7 @@ Function Ray_Color(R, World, Optional Depth = 0)
     Debug_Log("Ray_Color: Enter")
 
     Dim HitResult
-    HitResult = Hit(World, R, 0, 1000.0)
+    HitResult = Hit(World, R, 0.01, 1000.0)
 
     If HitResult_IsHit(HitResult) Then
         Dim Target, NewRay
