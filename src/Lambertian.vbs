@@ -15,6 +15,12 @@ End Function
 Function Lambertian_Scatter(Lambertian, IncidentRay, HitResult)
     Dim ScatterDirection, ScatteredRay, Attenuation
     ScatterDirection = Vector_Add(HitResult_Normal(HitResult), Math_RandomUnitVector())
+
+    ' Catch degenerate scatter direction
+    If Math_VectorIsNearZero(ScatterDirection) Then
+        ScatterDirection = HitResult_Normal(HitResult)
+    End If
+
     ScatteredRay = Ray_New(HitResult_Point(HitResult), ScatterDirection)
     Attenuation = Lambertian_Albedo(Lambertian)
 
